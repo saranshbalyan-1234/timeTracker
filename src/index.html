@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      rel="stylesheet"
+      id="bootstrap-css"
+    />
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> -->
+    <title>First Window</title>
+  </head>
+  <body>
+    <div class="container">
+      <div
+        class="row justify-content-center align-items-center"
+        style="height: 100vh"
+      >
+        <div class="col-4">
+          <div class="card">
+            <div class="card-body">
+              <form action="" autocomplete="off">
+                <div class="form-group">
+                  <input type="text" class="form-control" name="username" />
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control" name="password" />
+                </div>
+                <button type="button" id="sendlogin" class="btn btn-primary">
+                  login
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    const ipc = window.require("electron").ipcRenderer;
+
+    // Function that will be called on click
+    // event of "Go to settings window" button
+    function showTimeWindow() {
+      // Make sure to do ipc.send('some String'),
+      // where 'some String' must be same with
+      // the first parameter of ipcMain.on() in app.js
+      ipc.send("openChildWindow");
+    }
+  </script>
+</html>
