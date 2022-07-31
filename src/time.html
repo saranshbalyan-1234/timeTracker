@@ -1,12 +1,68 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Settings</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+    />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="Frontend/js/circletimer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/highlight.min.js"></script>
+    <link href="Frontend/css/circletimer-custom.css" rel="stylesheet" />
+
+    <style media="screen">
+      .example {
+        text-align: center;
+      }
+      #jquery-timer-demo {
+        height: 150px;
+        margin: 20px auto;
+        width: 150px;
+      }
+      p {
+        color: #bbae93;
+      }
+    </style>
   </head>
   <body>
-    <div>
-      <h1 style="color: green">Hello : This is Settings window</h1>
-      <button onclick="goToFirstWindow()">Go to Main Window</button>
+    <div class="example">
+      <div id="jquery-timer-demo"></div>
+      <p>Time Elapsed: <span id="counter-time">0</span>ms</p>
+      <button class="btn btn-success" id="btn-start">
+        <span class="glyphicon glyphicon-play"></span>
+      </button>
+      <button class="btn btn-primary" id="btn-pause">
+        <span class="glyphicon glyphicon-pause"></span>
+      </button>
+      <button class="btn btn-danger" id="btn-stop">
+        <span class="glyphicon glyphicon-stop"></span>
+      </button>
     </div>
+    <script>
+      $(document).on("ready", function () {
+        $("#jquery-timer-demo").circletimer({
+          onComplete: function () {
+            alert("Your time of 5 seconds is up!");
+          },
+          onUpdate: function (elapsed) {
+            $("#counter-time").html(Math.round(elapsed));
+          },
+          clockwise: false,
+          timeout: 5000,
+        });
+
+        $("#btn-start").on("click", function () {
+          $("#jquery-timer-demo").circletimer("start");
+        });
+
+        $("#btn-pause").on("click", function () {
+          $("#jquery-timer-demo").circletimer("pause");
+        });
+
+        $("#btn-stop").on("click", function () {
+          $("#jquery-timer-demo").circletimer("stop");
+        });
+      });
+    </script>
   </body>
 </html>

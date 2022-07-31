@@ -7,7 +7,7 @@
 
 const activeWin = require("active-win");
 const fs = require("fs-extra");
-const { defaultsDeep } = require("lodash");
+const _ = require("lodash");
 
 let intervalId;
 class ActivityTracker {

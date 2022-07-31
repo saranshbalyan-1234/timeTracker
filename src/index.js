@@ -43,6 +43,8 @@ function createChildWindow() {
   // Child window loads settings.html file
   childWindow.loadFile(path.join(__dirname, "time.html"));
 
+  mainWindow.webContents.openDevTools();
+
   childWindow.once("ready-to-show", () => {
     childWindow.show();
   });
