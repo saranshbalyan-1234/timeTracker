@@ -6,46 +6,108 @@
       rel="stylesheet"
       id="bootstrap-css"
     />
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> -->
     <title>First Window</title>
+    <style>
+      .btn-color {
+        background-color: #0e1c36;
+        color: #fff;
+      }
+
+      .profile-image-pic {
+        height: 200px;
+        width: 200px;
+        object-fit: cover;
+      }
+
+      .cardbody-color {
+        background-color: #ebf2fa;
+      }
+
+      a {
+        text-decoration: none;
+      }
+    </style>
   </head>
   <body>
     <div class="container">
-      <div
-        class="row justify-content-center align-items-center"
-        style="height: 100vh"
-      >
-        <div class="col-4">
-          <div class="card">
-            <div class="card-body">
-              <form action="" autocomplete="off">
-                <div class="form-group">
-                  <input type="text" class="form-control" name="username" />
-                </div>
-                <div class="form-group">
-                  <input type="password" class="form-control" name="password" />
-                </div>
-                <button type="button" id="sendlogin" class="btn btn-primary">
-                  login
+      <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <div class="card my-5">
+            <form id="myform" class="card-body cardbody-color p-lg-5">
+              <div class="text-center">
+                <img
+                  src="https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295397__340.png"
+                  class="img-fluid profile-image-pic img-thumbnail rounded-circle my-3"
+                  width="200px"
+                  alt="profile"
+                />
+              </div>
+
+              <div class="mb-3">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  aria-describedby="emailHelp"
+                  placeholder="Email"
+                />
+              </div>
+              <div class="mb-3">
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  placeholder="password"
+                />
+              </div>
+              <div class="text-center">
+                <button type="submit" class="btn btn-color px-5 mb-5 w-100">
+                  Login
                 </button>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
     </div>
   </body>
+  <script></script>
   <script>
+    $(document).ready(function () {
+      $("#myform").submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+          type: "POST",
+          contentType: "application/json",
+          url: "http://localhost:3000/auth/login",
+          data: JSON.stringify({
+            email: document.getElementById("email").value,
+            password: $("#password").val(),
+          }),
+          success: function (data) {
+            showTimeWindow(data);
+          },
+          error: function (req, err) {
+            console.log("my message" + err, {
+              email: document.getElementById("email").value,
+              password: $("#password").val(),
+            });
+          },
+        });
+      });
+    });
     const ipc = window.require("electron").ipcRenderer;
 
     // Function that will be called on click
     // event of "Go to settings window" button
-    function showTimeWindow() {
+    function showTimeWindow(data) {
       // Make sure to do ipc.send('some String'),
       // where 'some String' must be same with
       // the first parameter of ipcMain.on() in app.js
-      ipc.send("openChildWindow");
+      ipc.send("openChildWindow", data);
     }
   </script>
 </html>
