@@ -1,6 +1,5 @@
 const express = require("express");
 const apps = express();
-const path = require("path");
 const ActivityTracker = require("./ActivityTracker");
 const activityTracker = new ActivityTracker("tracking.json", 2000);
 
