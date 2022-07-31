@@ -29,7 +29,7 @@ db.sequelize = sequelize;
 
 // db.Car = require("./Models/Car")(sequelize, DataTypes);
 db.users = require("../Models/User")(sequelize, DataTypes);
-
+db.tracking = require("../Models/Tracking")(sequelize, DataTypes);
 db.sequelize
   .sync({
     force: false,
