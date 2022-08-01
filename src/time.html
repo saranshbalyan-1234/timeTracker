@@ -34,29 +34,66 @@
       <button class="btn btn-primary" id="btn-pause">
         <span class="glyphicon glyphicon-pause"></span>
       </button>
-      <button class="btn btn-danger" id="btn-stop">
+      <!-- <button class="btn btn-danger" id="btn-stop">
         <span class="glyphicon glyphicon-stop"></span>
-      </button>
+      </button> -->
     </div>
     <script>
+      function msToTime(duration) {
+        var milliseconds = Math.floor((duration % 1000) / 100),
+          seconds = Math.floor((duration / 1000) % 60),
+          minutes = Math.floor((duration / (1000 * 60)) % 60),
+          hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+        hours = hours < 10 ? "0" + hours : hours;
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+      }
+
       $(document).on("ready", function () {
         $("#jquery-timer-demo").circletimer({
           onComplete: function () {
-            alert("Your time of 5 seconds is up!");
+            alert("Your time of 10 seconds is up!");
           },
           onUpdate: function (elapsed) {
-            $("#counter-time").html(Math.round(elapsed));
+            $("#counter-time").html(msToTime(Math.round(elapsed)));
           },
           clockwise: false,
-          timeout: 5000,
+          timeout: 24 * 60 * 60 * 1000,
         });
 
         $("#btn-start").on("click", function () {
           $("#jquery-timer-demo").circletimer("start");
+
+          $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "http://localhost:3000/time/start",
+            success: function (data) {
+              console.log("timer started", data);
+            },
+            error: function (req, err) {
+              console.log("error ==>" + err);
+            },
+          });
         });
 
         $("#btn-pause").on("click", function () {
           $("#jquery-timer-demo").circletimer("pause");
+
+          $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "http://localhost:3000/time/pause",
+            success: function (data) {
+              console.log("timer paused", data);
+            },
+            error: function (req, err) {
+              console.log("error ==>" + err);
+            },
+          });
         });
 
         $("#btn-stop").on("click", function () {

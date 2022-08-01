@@ -91,7 +91,7 @@ class ActivityTracker {
     this.track();
   }
   async stop() {
-    console.log("stopped interval ==>", intervalId);
+    console.log("paused tracking");
     clearInterval(intervalId);
   }
 }

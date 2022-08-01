@@ -1,7 +1,7 @@
 {
   "Postman": {
     "Postman": {
-      "time": 1.976
+      "time": 3.958
     }
   },
   "Code": {
@@ -9,10 +9,26 @@
       "time": 2
     },
     "tracking.json — electron": {
-      "time": 3.9959999999999996
+      "time": 5.957
     },
     "time.html — electron": {
-      "time": 1.974
+      "time": 28.04
+    },
+    "index.js — electron": {
+      "time": 5.993
+    },
+    "circletimer-custom.css — electron": {
+      "time": 5.979
+    }
+  },
+  "Electron": {
+    "electron": {
+      "time": 177.26699999999997
+    }
+  },
+  "Microsoft Remote Desktop": {
+    "52.179.176.197": {
+      "time": 5.998
     }
   }
 }
