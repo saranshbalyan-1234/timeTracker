@@ -19,11 +19,17 @@
     },
     "circletimer-custom.css — electron": {
       "time": 5.979
+    },
+    "ActivityTracker.js — electron": {
+      "time": 14.019
+    },
+    "trackingController.js — electron": {
+      "time": 3.979
     }
   },
   "Electron": {
     "electron": {
-      "time": 177.26699999999997
+      "time": 187.23499999999999
     }
   },
   "Microsoft Remote Desktop": {

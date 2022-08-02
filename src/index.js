@@ -1,8 +1,9 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const backend = require("./Backend");
+const { userData } = require("./Backend/Controllers/trackingController");
 let mainWindow;
-let userData;
+// let userData = { id: 1 };
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 // eslint-disable-next-line global-require
 if (require("electron-squirrel-startup")) {
@@ -51,7 +52,7 @@ function createChildWindow() {
 }
 ipcMain.on("openChildWindow", (event, arg) => {
   console.log(arg);
-  userData = arg;
+  userData.id = arg.id;
   createChildWindow();
   mainWindow.close();
 });
@@ -80,4 +81,4 @@ app.on("activate", () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-module.exports = { userData };
+// module.exports = userData;

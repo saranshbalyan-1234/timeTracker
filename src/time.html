@@ -70,7 +70,7 @@
           $.ajax({
             type: "POST",
             contentType: "application/json",
-            url: "http://localhost:3000/time/start",
+            url: "http://localhost:3000/tracking/start",
             success: function (data) {
               console.log("timer started", data);
             },
@@ -86,9 +86,9 @@
           $.ajax({
             type: "POST",
             contentType: "application/json",
-            url: "http://localhost:3000/time/pause",
+            url: "http://localhost:3000/tracking/stop",
             success: function (data) {
-              console.log("timer paused", data);
+              console.log("timer stoped", data);
             },
             error: function (req, err) {
               console.log("error ==>" + err);

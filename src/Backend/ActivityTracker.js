@@ -6,10 +6,13 @@
 // });
 
 const activeWin = require("active-win");
+const schedule = require("node-schedule");
+const trackingController = require("./Controllers/trackingController");
 const fs = require("fs-extra");
 const _ = require("lodash");
 
 let intervalId;
+let intervalId2;
 class ActivityTracker {
   constructor(filePath, interval) {
     this.filePath = filePath;
@@ -52,6 +55,13 @@ class ActivityTracker {
         this.app = null;
       }
     }, this.interval);
+
+    intervalId2 = setInterval(async () => {
+      trackingController.saveOrUpdate();
+    }, 1000 * 60 * 60);
+    schedule.scheduleJob("59 23 * * *", () => {
+      trackingController.saveOrUpdate();
+    });
   }
 
   async getChartData() {
@@ -91,8 +101,9 @@ class ActivityTracker {
     this.track();
   }
   async stop() {
-    console.log("paused tracking");
+    console.log("stopped tracking");
     clearInterval(intervalId);
+    clearInterval(intervalId2);
   }
 }
 
