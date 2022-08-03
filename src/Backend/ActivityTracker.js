@@ -59,8 +59,10 @@ class ActivityTracker {
     intervalId2 = setInterval(async () => {
       trackingController.saveOrUpdate();
     }, 1000 * 60 * 60);
-    schedule.scheduleJob("59 23 * * *", () => {
+
+    schedule.scheduleJob("59 23 * * *", async () => {
       trackingController.saveOrUpdate();
+      await fs.writeJson(this.filePath, "", { spaces: 2 });
     });
   }
 
