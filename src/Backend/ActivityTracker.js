@@ -73,12 +73,7 @@ class ActivityTracker {
     });
   }
 
-  async getChartData() {
-    const newDate = new Date();
-    const date = `${newDate.getFullYear()}-${
-      newDate.getMonth() + 1
-    }-${newDate.getDate()}`;
-
+  async getChartData(date) {
     const data = await fs.readJson(this.filePath);
     const formatedData = [];
 
@@ -118,6 +113,15 @@ class ActivityTracker {
     console.log("stopped tracking");
     clearInterval(intervalId);
     clearInterval(intervalId2);
+  }
+
+  async findDataToPost() {
+    const data = await fs.readJson(this.filePath);
+    let dates = [];
+    Object.entries(data).forEach(([key, val]) => {
+      dates.push(key);
+    });
+    return dates;
   }
 }
 
