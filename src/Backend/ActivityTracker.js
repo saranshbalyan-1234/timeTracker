@@ -24,9 +24,14 @@ class ActivityTracker {
 
   async storeData() {
     const newDate = new Date();
-    const date = `${newDate.getFullYear()}-${
-      newDate.getMonth() + 1
-    }-${newDate.getDate()}`;
+    let currentYear = newDate.getFullYear();
+    let currentMonth =
+      newDate.getMonth() + 1 < 10
+        ? `0${newDate.getMonth() + 1}`
+        : `${newDate.getMonth() + 1}`;
+    let currentDay =
+      newDate.getDate() < 10 ? `0${newDate.getDate()}` : newDate.getDate();
+    let date = `${currentYear}-${currentMonth}-${currentDay}`;
     const content = await fs.readJson(this.filePath);
     const time = {
       start: this.start,
@@ -67,10 +72,10 @@ class ActivityTracker {
       trackingController.saveOrUpdate();
     }, 1000 * 60 * 60);
 
-    schedule.scheduleJob("59 23 * * *", async () => {
-      trackingController.saveOrUpdate();
-      await fs.writeJson(this.filePath, "", { spaces: 2 });
-    });
+    // schedule.scheduleJob("59 23 * * *", async () => {
+    //   trackingController.saveOrUpdate();
+    //   await fs.writeJson(this.filePath, "", { spaces: 2 });
+    // });
   }
 
   async getChartData(date) {
@@ -122,6 +127,12 @@ class ActivityTracker {
       dates.push(key);
     });
     return dates;
+  }
+
+  async removeOldData(date) {
+    let content = await fs.readJson(this.filePath);
+    delete content[date];
+    await fs.writeJson(this.filePath, content, { spaces: 2 });
   }
 }
 

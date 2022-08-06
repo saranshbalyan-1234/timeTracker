@@ -23,14 +23,12 @@ const saveOrUpdate = async (req, res) => {
   if (!userData.id)
     return res.status(400).json({ errors: ["User details not given"] });
 
-  // const newDate = new Date();
-  // let currentYear = newDate.getFullYear();
-  // let currentMonth =
-  //   newDate.getMonth() + 1 < 10
-  //     ? `0${newDate.getMonth() + 1}`
-  //     : `${newDate.getMonth() + 1}`;
-  // let currentDay =
-  //   newDate.getDate() < 10 ? `0${newDate.getDate()}` : newDate.getDate();
+  let errors = [];
+  let messages = [];
+  const newDate = new Date();
+
+  let currentDay =
+    newDate.getDate() < 10 ? `0${newDate.getDate()}` : newDate.getDate();
 
   const dates = await activityTracker.findDataToPost();
 
@@ -59,8 +57,10 @@ const saveOrUpdate = async (req, res) => {
             )
               .then(async (resp) => {
                 if (resp[0]) {
-                  res.status(200).json({ message: "Tracking Updated" });
+                  messages.push(`Tracking updated for date ${date}`);
+                  // res.status(200).json({ message: "Tracking Updated" });
                 } else {
+                  // errors.push(`Record not found for date ${date}`);
                   res.status(400).json({ errors: ["Record not found"] });
                 }
               })
@@ -70,7 +70,8 @@ const saveOrUpdate = async (req, res) => {
           } else {
             await Tracking.create(data)
               .then((resp) => {
-                res.status(200).json({ message: "Tracking Saved" });
+                messages.push(`Tracking saved for date ${date}`);
+                // res.status(200).json({ message: "Tracking Saved" });
               })
               .catch((e) => {
                 getError(e, res);
@@ -81,7 +82,12 @@ const saveOrUpdate = async (req, res) => {
           getError(e, res);
         });
     }
+
+    if (date.substring(8) !== currentDay) {
+      activityTracker.removeOldData(date);
+    }
   });
+  res.status(200).json(messages);
 };
 
 module.exports = {

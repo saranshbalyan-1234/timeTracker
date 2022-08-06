@@ -51,7 +51,7 @@ function createChildWindow() {
   });
 }
 ipcMain.on("openChildWindow", (event, arg) => {
-  console.log(arg);
+  console.log("currentUser===>", arg);
   userData.id = arg.id;
   createChildWindow();
   mainWindow.close();
