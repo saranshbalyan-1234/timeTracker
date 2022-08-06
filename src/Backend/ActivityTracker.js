@@ -13,6 +13,7 @@ const _ = require("lodash");
 
 let intervalId;
 let intervalId2;
+
 class ActivityTracker {
   constructor(filePath, interval) {
     this.filePath = filePath;
@@ -22,6 +23,10 @@ class ActivityTracker {
   }
 
   async storeData() {
+    const newDate = new Date();
+    const date = `${newDate.getFullYear()}-${
+      newDate.getMonth() + 1
+    }-${newDate.getDate()}`;
     const content = await fs.readJson(this.filePath);
     const time = {
       start: this.start,
@@ -33,9 +38,11 @@ class ActivityTracker {
       title,
     } = this.app;
 
-    _.defaultsDeep(content, { [name]: { [title]: { time: 0, url } } });
+    _.defaultsDeep(content, {
+      [date]: { [name]: { [title]: { time: 0, url } } },
+    });
 
-    content[name][title].time += Math.abs(time.start - time.end) / 1000;
+    content[date][name][title].time += Math.abs(time.start - time.end) / 1000;
 
     await fs.writeJson(this.filePath, content, { spaces: 2 });
   }
@@ -67,10 +74,15 @@ class ActivityTracker {
   }
 
   async getChartData() {
+    const newDate = new Date();
+    const date = `${newDate.getFullYear()}-${
+      newDate.getMonth() + 1
+    }-${newDate.getDate()}`;
+
     const data = await fs.readJson(this.filePath);
     const formatedData = [];
 
-    Object.entries(data).forEach(([key, val]) => {
+    Object.entries(data[date]).forEach(([key, val]) => {
       const programs = [];
       let totalTimeOnApp = 0;
 
