@@ -2,6 +2,7 @@ const db = require("../Utils/dataBaseConnection");
 const getError = require("../Utils/sequelizeError");
 const fs = require("fs-extra");
 const ActivityTracker = require("../ActivityTracker");
+const getErrorOnly = require("../Utils/errorOnly");
 const activityTracker = new ActivityTracker("tracking.json", 2000);
 
 const Tracking = db.tracking;
@@ -23,8 +24,6 @@ const saveOrUpdate = async (req, res) => {
   if (!userData.id)
     return res.status(400).json({ errors: ["User details not given"] });
 
-  let errors = [];
-  let messages = [];
   const newDate = new Date();
 
   let currentDay =
@@ -32,7 +31,7 @@ const saveOrUpdate = async (req, res) => {
 
   const dates = await activityTracker.findDataToPost();
 
-  dates.forEach(async (date) => {
+  await dates.forEach(async (date) => {
     const chartData = await activityTracker.getChartData(date);
     const data = {
       user_id: userData.id,
@@ -54,40 +53,25 @@ const saveOrUpdate = async (req, res) => {
               {
                 where: { user_id: userData.id, date: data.date },
               }
-            )
-              .then(async (resp) => {
-                if (resp[0]) {
-                  messages.push(`Tracking updated for date ${date}`);
-                  // res.status(200).json({ message: "Tracking Updated" });
-                } else {
-                  // errors.push(`Record not found for date ${date}`);
-                  res.status(400).json({ errors: ["Record not found"] });
-                }
-              })
-              .catch((e) => {
-                getError(e, res);
-              });
+            ).catch((e) => {
+              console.log(e);
+            });
           } else {
-            await Tracking.create(data)
-              .then((resp) => {
-                messages.push(`Tracking saved for date ${date}`);
-                // res.status(200).json({ message: "Tracking Saved" });
-              })
-              .catch((e) => {
-                getError(e, res);
-              });
+            await Tracking.create(data).catch((e) => {
+              console.log(e);
+            });
           }
         })
         .catch((e) => {
-          getError(e, res);
+          console.log(e);
         });
     }
 
     if (date.substring(8) !== currentDay) {
-      activityTracker.removeOldData(date);
+      await activityTracker.removeOldData(date);
     }
   });
-  res.status(200).json(messages);
+  return res.status(200).json({ message: "Synced Tracking Data" });
 };
 
 module.exports = {

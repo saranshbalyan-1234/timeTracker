@@ -133,6 +133,7 @@ class ActivityTracker {
     let content = await fs.readJson(this.filePath);
     delete content[date];
     await fs.writeJson(this.filePath, content, { spaces: 2 });
+    return true;
   }
 }
 
